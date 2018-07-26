@@ -9,11 +9,14 @@ class Colorize:
         self.file = ''
         self.grayImg = ''
         self.blurImg = ''
+        self.dilateImg = ''
+        self.erodeImg = ''
 
     def gray(self):
         color = cv2.imread(self.file, 1)
         self.grayImg = cv2.cvtColor(color, cv2.COLOR_RGB2GRAY)
-        cv2.imshow("gray.jpg", self.grayImg)
+        cv2.namedWindow("Gray Image", cv2.WINDOW_NORMAL)
+        cv2.imshow("Gray Image", self.grayImg)
 
         graySave = Button(root, text="Save", command=test.graySave, height=2, width=7, bg='green', fg='white', font=20)
         graySave.pack()
@@ -25,23 +28,44 @@ class Colorize:
     def blur(self):
         print("Blur")
         image = cv2.imread(self.file, 1)
-        self.blurImg = cv2.GaussianBlur(image, (5,55),0)
+        self.blurImg = cv2.GaussianBlur(image,(5,55),0)
+        cv2.namedWindow("Blur", cv2.WINDOW_NORMAL)
         cv2.imshow("Blur",self.blurImg)
 
         blurSave = Button(root, text="Save", command=test.blurSave, height=2, width=7, bg='green', fg='white', font=20)
         blurSave.pack()
         blurSave.place(x=790, y=220)
 
-        kernel = np.ones((5,5),'uint8')
-
-        dilate = cv2.dilate(image,kernel,iterations=1)
-        erode = cv2.erode(image,kernel,iterations=1)
-
-        cv2.imshow("Dilate",dilate)
-        cv2.imshow("Erode",erode)
-
     def blurSave(self):
         cv2.imwrite("blurImg.jpg", self.blurImg)
+
+    def dilate(self):
+        image = cv2.imread(self.file, 1)
+        kernel = np.ones((5, 5), 'uint8')
+        self.dilateImg = cv2.dilate(image, kernel, iterations=1)
+        cv2.namedWindow("Dilate", cv2.WINDOW_NORMAL)
+        cv2.imshow("Dilate",self.dilateImg)
+
+        dilateSave = Button(root, text="Save", command=test.dilateSave, height=2, width=7, bg='green', fg='white', font=20)
+        dilateSave.pack()
+        dilateSave.place(x=790, y=280)
+
+    def dilateSave(self):
+        cv2.imwrite("dilateImg.jpg", self.dilateImg)
+
+    def erode(self):
+        image = cv2.imread(self.file, 1)
+        kernel = np.ones((5, 5), 'uint8')
+        self.erodeImg = cv2.erode(image,kernel,iterations=1)
+        cv2.namedWindow("Erode", cv2.WINDOW_NORMAL)
+        cv2.imshow("Erode",self.erodeImg)
+
+        erodeSave = Button(root, text="Save", command=test.erodeSave, height=2, width=7, bg='green', fg='white', font=20)
+        erodeSave.pack()
+        erodeSave.place(x=790, y=340)
+
+    def erodeSave(self):
+        cv2.imwrite("erodeImg.jpg", self.erodeImg)
 
 def chooseFile():
     global test
@@ -73,6 +97,14 @@ def main():
     blur = Button(root, text="Blur", command=test.blur, height=2, width=8, bg='lightgray', fg='white', font=20)
     blur.pack()
     blur.place(x=700, y=220)
+
+    dilate = Button(root, text="Dilate", command=test.dilate, height=2, width=8, bg='red', fg='white', font=20)
+    dilate.pack()
+    dilate.place(x=700, y=280)
+
+    erode = Button(root, text="Erode", command=test.erode, height=2, width=8, bg='red', fg='white', font=20)
+    erode.pack()
+    erode.place(x=700, y=340)
 
     
 
